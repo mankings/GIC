@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: 20
       - name: Change Directory
-        run: cd landing-page
+        run: cd landing-page && ls
       - name: Install dependencies
         run: npm install
       - name: Build files
