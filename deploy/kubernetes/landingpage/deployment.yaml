@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landingpage-uareviews
+  namespace: uareviews
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: landingpage-uareviews
+  template:
+    metadata:
+      labels:
+        app: landingpage-uareviews
+    spec:
+      containers:
+      - name: landingpage-uareviews
+        image: registry.deti/uareviews/landingpage
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
