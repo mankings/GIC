@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drupal
+  template:
+    metadata:
+      labels:
+        app: drupal
+    spec:
+      containers:
+      - name: drupal
+        image: drupal:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: MYSQL_DATABASE
+          value: drupal
+        - name: MYSQL_USER
+          value: root
+        - name: MYSQL_PASSWORD
+          value: password
+        - name: MYSQL_HOST
+          value: mysql
+        volumeMounts:
+        - name: drupal-persistent-storage
+          mountPath: /var/www/html
