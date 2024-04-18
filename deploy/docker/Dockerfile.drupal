@@ -1,0 +1,17 @@
+FROM alpine:3.19
+
+RUN apk add --update apache2 php-apache2  \
+	php-ctype php-tokenizer php-curl \
+	php-gd php-json php-openssl \
+	php-pdo php-pdo_mysql mysql-client php-session \
+	php-xml php-simplexml php-xmlreader \
+	php-dom
+
+RUN rm -rf /var/cache/apk/*
+RUN rm /var/www/localhost/htdocs/index.html
+
+EXPOSE 80
+
+COPY config/drupal/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD ["/entrypoint.sh"]

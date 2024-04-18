@@ -12,3 +12,5 @@
 # base 64 encode
 echo -n "password123" | base64 -i -
 ```
+
+https://www.drupal.org/download-latest/tar.gz

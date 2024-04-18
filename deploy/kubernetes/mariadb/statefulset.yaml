@@ -1,53 +1,53 @@
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: mariadb-uareviews
-  namespace: uareviews
-spec:
-  serviceName: mariadb-uareviews
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mariadb-uareviews
-  template:
-    metadata:
-      labels:
+  apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    name: mariadb-uareviews
+    namespace: uareviews
+  spec:
+    serviceName: mariadb-uareviews
+    replicas: 1
+    selector:
+      matchLabels:
         app: mariadb-uareviews
-    spec:
-      containers:
-      - name: mariadb-uareviews
-        image: registry.deti/uareviews/mariadb
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mariadb-secret
-              key: root-password
-        - name: MYSQL_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: mariadb-secret
-              key: database
-        - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: mariadb-secret
-              key: user
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mariadb-secret
-              key: password
-        volumeMounts:
-        - name: mariadb-data
-          mountPath: /var/lib/mysql
-  volumeClaimTemplates:
-  - metadata:
-      name: mariadb-data
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 1Gi
+    template:
+      metadata:
+        labels:
+          app: mariadb-uareviews
+      spec:
+        containers:
+        - name: mariadb-uareviews
+          image: registry.deti/uareviews/mariadb
+          ports:
+          - containerPort: 3306
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-secret
+                key: root-password
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-secret
+                key: database
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-secret
+                key: user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-secret
+                key: password
+          volumeMounts:
+          - name: mariadb-data
+            mountPath: /var/lib/mysql
+    volumeClaimTemplates:
+    - metadata:
+        name: mariadb-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources: 
+          requests:
+            storage: 1Gi
