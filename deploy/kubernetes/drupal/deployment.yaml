@@ -1,31 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: drupal-deployment
+  name: drupal-uareviews
+  namespace: uareviews
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: drupal
+      app: drupal-uareviews
   template:
     metadata:
       labels:
-        app: drupal
+        app: drupal-uareviews
     spec:
       containers:
       - name: drupal
-        image: drupal:latest
+        image: docker.io/uareviews/drupal:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
-        env:
-        - name: MYSQL_DATABASE
-          value: drupal
-        - name: MYSQL_USER
-          value: root
-        - name: MYSQL_PASSWORD
-          value: password
-        - name: MYSQL_HOST
-          value: mysql
         volumeMounts:
-        - name: drupal-persistent-storage
-          mountPath: /var/www/html
+        - name: drupal-pvc-uareviews
+          mountPath: /var/www/localhost/htdocs/sites
+      volumes:
+      - name: drupal-pvc-uareviews
+        persistentVolumeClaim:
+          claimName: drupal-pvc-uareviews

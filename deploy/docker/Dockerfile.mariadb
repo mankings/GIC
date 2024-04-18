@@ -1,33 +1,16 @@
 # Use Alpine Linux as the base image
 FROM alpine:3.19
 
-# Install MariaDB
-RUN apk --no-cache add mariadb mariadb-client
+LABEL maintainer="UAREVIEWS"
 
-# Configure MariaDB to listen on all interfaces
-RUN sed -i 's/^skip-networking/#skip-networking/' /etc/my.cnf.d/mariadb-server.cnf
+# Install MariaDB from the Alpine repositories
+RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils
+RUN mysql_install_db --user=mysql
 
-# Copy the custom configuration file, if any (uncomment next line and add your my.cnf)
-# COPY my.cnf /etc/my.cnf
+VOLUME /data
 
-# Initialize the database (comment out if you wish to do this manually or use an existing data directory)
-RUN mysql_install_db --user=mysql --ldata=/var/lib/mysql
+# Create a new directory for MariaDB to store database files
+ENTRYPOINT [ "mysqld_safe", "--datadir=/data" ]
 
-# Set environment variables for database user and password (change accordingly)
-# ENV MYSQL_ROOT_PASSWORD=root_password
-# ENV MYSQL_DATABASE=user_database
-# ENV MYSQL_USER=user
-# ENV MYSQL_PASSWORD=user_password
-
-# Add script to create initial databases and users (uncomment next line and add your script)
-# COPY create_initial_databases_and_users.sql /docker-entrypoint-initdb.d/
-
-# Expose port 3306
+# Expose the port MariaDB is reachable on
 EXPOSE 3306
-
-# Set the health check (optional, but recommended)
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD mysqladmin ping -h localhost || exit 1
-
-# Default command to run when starting the container
-CMD ["mysqld_safe"]

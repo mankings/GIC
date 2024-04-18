@@ -1,17 +1,26 @@
 FROM alpine:3.19
 
+# install php, apache and necessary extensions
 RUN apk add --update apache2 php-apache2  \
 	php-ctype php-tokenizer php-curl \
-	php-gd php-json php-openssl \
+	php-gd php-json php-openssl php-mbstring \
 	php-pdo php-pdo_mysql mysql-client php-session \
-	php-xml php-simplexml php-xmlreader \
-	php-dom
+	php-xml php-simplexml php-xmlreader php-opcache \
+	php-dom php-fpm php
 
+# rm cache and defaults
 RUN rm -rf /var/cache/apk/*
 RUN rm /var/www/localhost/htdocs/index.html
 
-EXPOSE 80
+# get drupal files and unpack into apache
+RUN wget https://www.drupal.org/files/projects/drupal-10.2.5.tar.gz \
+	&& tar -zxvf drupal-10.2.5.tar.gz \
+	&& mv drupal-10.2.5/* drupal-10.2.5/.htaccess drupal-10.2.5/.csslintrc drupal-10.2.5/.editorconfig drupal-10.2.5/.eslintignore drupal-10.2.5/.eslintrc.json drupal-10.2.5/.gitattributes /var/www/localhost/htdocs/ \
+	&& rm drupal-10.2.5.tar.gz && rm -rf drupal-10.2.5
 
+# configure entrypoint
 COPY config/drupal/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+EXPOSE 80
 CMD ["/entrypoint.sh"]

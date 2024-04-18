@@ -1,11 +1,8 @@
-
 FROM alpine
 
 # Instale o Nginx
 RUN apk update && \
     apk add nginx
-
-#COPY nginx.conf /etc/nginx/nginx.confd
 
 # Expor a porta 80 para acesso externo
 EXPOSE 80
