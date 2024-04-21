@@ -8,6 +8,10 @@ RUN apk add --update apache2 php-apache2  \
 	php-xml php-simplexml php-xmlreader php-opcache \
 	php-dom php-fpm php
 
+RUN cd /var/www/html/[your_drupal_directory] \
+	composer require drupal/syslog \
+	drush en syslog -y
+
 # rm cache and defaults
 RUN rm -rf /var/cache/apk/*
 RUN rm /var/www/localhost/htdocs/index.html
