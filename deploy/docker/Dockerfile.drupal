@@ -14,9 +14,9 @@ RUN rm /var/www/localhost/htdocs/index.html
 
 # get drupal files and unpack into apache
 RUN wget https://www.drupal.org/files/projects/drupal-10.2.5.tar.gz \
-	&& tar -zxvf drupal-10.2.5.tar.gz /var/www/localhost/htdocs/ \
-	&& rm drupal-10.2.5.tar.gz \
-	&& chmod -R apache:apache /var/www/localhost/htdocs/
+	&& tar -zxf drupal-10.2.5.tar.gz -C /var/www/localhost/htdocs/ \
+	&& rm drupal-10.2.5.tar.gz 
+	# && chmod -R apache:apache /var/www/localhost/htdocs/
 
 # adjust apache config
 RUN sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf
