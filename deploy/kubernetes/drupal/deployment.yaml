@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: drupal-uareviews
+  name: drupal-dep
   namespace: uareviews
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: drupal-uareviews
+      app: drupal
   template:
     metadata:
       labels:
-        app: drupal-uareviews
+        app: drupal
     spec:
       containers:
       - name: drupal
@@ -19,10 +19,44 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 80
+        env:
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: drupal-secret
+              key: user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drupal-secret
+              key: password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: drupal-secret
+              key: database
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: drupal-secret
+              key: host
+        - name: MYSQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: drupal-secret
+              key: port
+
         volumeMounts:
-        - name: drupal-pvc-uareviews
+        - name: drupal-pvc
           mountPath: /var/www/localhost/htdocs/sites
+          # - name: drupal-settings
+          #   mountPath: /var/www/localhost/htdocs/sites/default/settings.php
+          #   subPath: settings.php
+          #   readOnly: false
       volumes:
-      - name: drupal-pvc-uareviews
+      - name: drupal-pvc
         persistentVolumeClaim:
-          claimName: drupal-pvc-uareviews
+          claimName: drupal-pvc
+      # - name: drupal-settings
+      #   configMap:
+      #     name: drupal-settings

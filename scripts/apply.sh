@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/zsh
 
 pushd mariadb
 kubectl apply -f pvc.yaml

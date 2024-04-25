@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: mariadb
-        image: docker.io/uareviews/mariadb
-        imagePullPolicy: Never
+        image: mariadb:latest
+        # imagePullPolicy: Never
         ports:
         - containerPort: 3306
         env:

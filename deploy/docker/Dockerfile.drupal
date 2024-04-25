@@ -8,19 +8,19 @@ RUN apk add --update apache2 php-apache2  \
 	php-xml php-simplexml php-xmlreader php-opcache \
 	php-dom php-fpm php
 
-RUN cd /var/www/html/[your_drupal_directory] \
-	composer require drupal/syslog \
-	drush en syslog -y
-
 # rm cache and defaults
 RUN rm -rf /var/cache/apk/*
 RUN rm /var/www/localhost/htdocs/index.html
 
 # get drupal files and unpack into apache
 RUN wget https://www.drupal.org/files/projects/drupal-10.2.5.tar.gz \
-	&& tar -zxvf drupal-10.2.5.tar.gz \
-	&& mv drupal-10.2.5/* drupal-10.2.5/.htaccess drupal-10.2.5/.csslintrc drupal-10.2.5/.editorconfig drupal-10.2.5/.eslintignore drupal-10.2.5/.eslintrc.json drupal-10.2.5/.gitattributes /var/www/localhost/htdocs/ \
-	&& rm drupal-10.2.5.tar.gz && rm -rf drupal-10.2.5
+	&& tar -zxvf drupal-10.2.5.tar.gz /var/www/localhost/htdocs/ \
+	&& rm drupal-10.2.5.tar.gz \
+	&& chmod -R apache:apache /var/www/localhost/htdocs/
+
+# adjust apache config
+RUN sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf
+RUN sed -i 's#^DocumentRoot "/var/www/localhost/htdocs"$#DocumentRoot "/var/www/localhost/htdocs/drupal-10.2.5"#' /etc/apache2/httpd.conf
 
 # configure entrypoint
 COPY config/drupal/entrypoint.sh /entrypoint.sh

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mariadb-uareviews
+  name: mariadb-svc
   namespace: uareviews
 spec:
   ports:
   - port: 3306
     targetPort: 3306
   selector:
-    app: mariadb-uareviews
+    app: mariadb
   clusterIP: None

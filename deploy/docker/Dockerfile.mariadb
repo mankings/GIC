@@ -9,15 +9,10 @@ RUN apk --no-cache add mariadb mariadb-client mariadb-server-utils \
 
 # Copy initialization script
 COPY config/mariadb/entrypoint.sh /scripts/entrypoint.sh
+COPY config/mariadb/my.cnf /etc/my.cnf.d/my.cnf
 
 # Make our custom entrypoint executable
 RUN chmod +x /scripts/entrypoint.sh
-
-# Environment variables to configure MariaDB
-ENV MYSQL_DATABASE=defaultdb \
-    MYSQL_USER=user \
-    MYSQL_PASSWORD=password \
-    MYSQL_ROOT_PASSWORD=rootpassword
 
 # Expose the port MariaDB is reachable on
 EXPOSE 3306
