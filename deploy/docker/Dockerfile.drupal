@@ -1,7 +1,7 @@
 FROM alpine:3.19
 
 # install php, apache and necessary extensions
-RUN apk add --update apache2 php-apache2  \
+RUN apk --no-cache add apache2 php-apache2  \
 	php-ctype php-tokenizer php-curl \
 	php-gd php-json php-openssl php-mbstring \
 	php-pdo php-pdo_mysql mysql-client php-session \
@@ -10,21 +10,26 @@ RUN apk add --update apache2 php-apache2  \
 
 # rm cache and defaults
 RUN rm -rf /var/cache/apk/*
-RUN rm /var/www/localhost/htdocs/index.html
 
 # get drupal files and unpack into apache
 RUN wget https://www.drupal.org/files/projects/drupal-10.2.5.tar.gz \
-	&& tar -zxf drupal-10.2.5.tar.gz -C /var/www/localhost/htdocs/ --strip-components=1 \
+	&& tar -zxf drupal-10.2.5.tar.gz \
+	&& mv drupal-10.2.5 /var/www/localhost/htdocs/drupal \
 	&& rm drupal-10.2.5.tar.gz \
-	&& chown -R apache:apache /var/www/localhost/htdocs
+	&& chown -R apache:apache /var/www/localhost/htdocs/drupal \
+	&& chmod -R 755 /var/www/localhost/htdocs/drupal
 
 # adjust apache config
+RUN sed -i 's/#LoadModule rewrite_module/LoadModule rewrite_module/' /etc/apache2/httpd.conf
 RUN sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf
-RUN sed -i 's#^DocumentRoot "/var/www/localhost/htdocs"$#DocumentRoot "/var/www/localhost/htdocs/drupal-10.2.5"#' /etc/apache2/httpd.conf
+# RUN sed -i 's#^DocumentRoot "/var/www/localhost/htdocs/drupal"$#DocumentRoot "/var/www/localhost/htdocs/drupal"#' /etc/apache2/httpd.conf
 
-# configure entrypoint
-COPY config/drupal/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY config/drupal/drupal.conf /etc/apache2/conf.d/drupal.conf
 
 EXPOSE 80
-CMD ["/entrypoint.sh"]
+
+# Set the entrypoint to start Apache and PHP-FPM
+ENTRYPOINT ["sh", "-c", "httpd; php-fpm82; tail -f /dev/null"]
+
+# Set the default command (This is generally used to define default arguments for the entrypoint)
+CMD ["-D", "FOREGROUND"]
