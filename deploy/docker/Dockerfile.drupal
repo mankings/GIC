@@ -44,7 +44,6 @@ RUN  apk update \
 
 RUN mkdir /etc/rsyslog.d/
 RUN chmod -R 777 /etc/rsyslog.d/
-RUN chmod -R 777 /var/
 
 #RUN touch /var/log/local6.log
 
