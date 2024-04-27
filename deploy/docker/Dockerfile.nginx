@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.19
 
 # Instale o Nginx
 RUN apk update && \
@@ -6,7 +6,6 @@ RUN apk update && \
 
 # Expor a porta 80 para acesso externo
 EXPOSE 80
-
 
 # Comando para iniciar o Nginx em primeiro plano
 CMD ["nginx", "-g", "daemon off;"]
