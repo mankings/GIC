@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
       - name: drupal
-        image: localhost:32000/drupal:13.0
-        imagePullPolicy: Always
+        image: registry.deti/uareviews/drupal:latest
         ports:
         - containerPort: 80
         env:

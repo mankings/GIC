@@ -15,8 +15,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: docker.io/uareviews/redis:latest
-        imagePullPolicy: Never
+        image: registry.deti/uareviews/redis:latest
         ports:
         - containerPort: 6379
         env:

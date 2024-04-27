@@ -15,8 +15,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: docker.io/uareviews/nginx:latest
-        imagePullPolicy: Never
+        image: registry.deti/uareviews/landingpage
         ports:
         - containerPort: 80
 

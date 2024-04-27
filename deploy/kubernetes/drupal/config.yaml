@@ -9,5 +9,5 @@ data:
   MYSQL_HOST: "mariadb-sts-0.mariadb-svc.uareviews.svc.cluster.local"
   MYSQL_PORT: "3306"
 
-  REDIS_HOST: "redis-svc"
+  REDIS_HOST: "redis-svc.uareviews.svc.cluster.local"
   REDIS_PORT: "6379"
