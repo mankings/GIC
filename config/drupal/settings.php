@@ -90,14 +90,21 @@
  */
 $databases = [];
 $databases['default']['default'] = array (
+  // 'database' => 'uareviews',
   'database' => getenv('MYSQL_DATABASE'),
+  // 'username' => 'admin',
   'username' => getenv('MYSQL_USER'),
+  // 'password' => 'password',
   'password' => getenv('MYSQL_PASSWORD'),
-  'host' => 'mariadb-sts-0.mariadb-svc.uareviews.svc.cluster.local',
-  'port' => 3306,
-  'driver' => 'mysql',
   'prefix' => '',
-  'collation' => 'utf8mb4_general_ci',
+  // 'host' => 'mariadb-sts-0.mariadb-svc.uareviews.svc.cluster.local',
+  'host' => getenv('MYSQL_HOST'),
+  // 'port' => '3306',
+  'port' => getenv('MYSQL_PORT'),
+  'isolation_level' => 'READ COMMITTED',
+  'driver' => 'mysql',
+  'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
+  'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 );
 
 /**
@@ -266,7 +273,7 @@ $databases['default']['default'] = array (
  * directory in the public files path. The setting below allows you to set
  * its location.
  */
-# $settings['config_sync_directory'] = '/directory/outside/webroot';
+$settings['config_sync_directory'] = '/var/www/localhost/htdocs/drupal/config_sync';
 
 /**
  * Settings:
@@ -296,7 +303,7 @@ $databases['default']['default'] = array (
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = '';
+$settings['hash_salt'] = getenv('HASH_SALT');
 
 /**
  * Deployment identifier.
@@ -874,6 +881,17 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # $settings['migrate_file_public_path'] = '';
 # $settings['migrate_file_private_path'] = '';
 
+$config['system.logging']['error_level']='verbose';
+
+$settings['redis.connection']['interface'] = 'PhpRedis';
+$settings['redis.connection']['host'] = getenv('REDIS_HOST');
+$settings['redis.connection']['port'] = getenv('REDIS_PORT');
+$settings['redis.connection']['password'] = getenv('REDIS_PASSWORD');
+$settings['redis.connection']['timeout'] = 2.5;
+
+$settings['trusted_host_patterns'] = [
+  '^uareviews\.k3s$',
+];
 /**
  * Load local development override configuration, if available.
  *

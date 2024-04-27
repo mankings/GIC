@@ -1,0 +1,13 @@
+FROM alpine:3.19
+
+LABEL maintainer="UAREVIEWS"
+
+RUN apk add --no-cache redis \
+    && mkdir /data \
+    && chown redis:redis /data
+
+COPY config/redis/redis.conf /etc/redis.conf
+
+EXPOSE 6379
+
+ENTRYPOINT ["redis-server", "/etc/redis.conf"]
