@@ -18,6 +18,7 @@ RUN wget https://www.drupal.org/files/projects/drupal-10.2.5.tar.gz \
 	&& rm drupal-10.2.5.tar.gz \
 	&& chown -R apache:apache /var/www/localhost/htdocs/drupal \
 	&& chmod -R 755 /var/www/localhost/htdocs/drupal
+RUN mkdir -p /var/www/localhost/htdocs/drupal/config_sync
 
 # redis module
 RUN wget https://ftp.drupal.org/files/projects/redis-8.x-1.7.tar.gz \
