@@ -45,6 +45,11 @@ spec:
             configMapKeyRef:
               name: drupal-settings
               key: MYSQL_PORT
+        - name: HASH_SALT
+          valueFrom:
+            secretKeyRef:
+              name: drupal-secret
+              key: HASH_SALT
 
         volumeMounts:
         - name: drupal-pvc

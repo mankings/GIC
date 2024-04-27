@@ -1,15 +1,7 @@
 #! /bin/zsh
 
-pushd mariadb
-kubectl apply -f pvc.yaml
-kubectl apply -f secrets.yaml
-kubectl apply -f statefulset.yaml
-kubectl apply -f service.yaml
-popd
+k apply -f deploy/kubernetes/mariadb/service.yaml
+k apply -f deploy/kubernetes/mariadb/statefulset-default.yaml
+k apply -f deploy/kubernetes/mariadb/secrets.yaml
 
-pushd drupal 
-kubectl apply -f secrets.yaml
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
-popd
-
+k apply -f deploy/kubernetes/drupal/
