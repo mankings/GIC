@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rsyslog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rsyslog
+  template:
+    metadata:
+      labels:
+        app: rsyslog
+    spec:
+      containers:
+      - name: rsyslog
+        image: localhost:32000/rsyslog:2.0  # You can replace this with the appropriate rsyslog image
+        ports:
+        - containerPort: 50514  # Adjust the port number as needed

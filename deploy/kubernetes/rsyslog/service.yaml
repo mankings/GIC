@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rsyslog-svc
+spec:
+  ports:
+  - port: 50514
+    targetPort: 50514
+  selector:
+    app: rsyslog

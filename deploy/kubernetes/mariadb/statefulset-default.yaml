@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mariadb-sts
-  namespace: uareviews
 spec:
   serviceName: mariadb-svc
   replicas: 1

@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: drupal-dep
-  namespace: uareviews
 spec:
   replicas: 1
   selector:
@@ -15,8 +14,8 @@ spec:
     spec:
       containers:
       - name: drupal
-        image: docker.io/uareviews/drupal:latest
-        imagePullPolicy: Never
+        image: localhost:32000/drupal:13.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         env:
@@ -35,16 +34,6 @@ spec:
             secretKeyRef:
               name: drupal-secret
               key: database
-        - name: MYSQL_HOST
-          valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: host
-        - name: MYSQL_PORT
-          valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: port
 
         volumeMounts:
         - name: drupal-pvc

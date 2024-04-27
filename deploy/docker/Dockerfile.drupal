@@ -26,10 +26,24 @@ RUN sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf
 
 COPY config/drupal/drupal.conf /etc/apache2/conf.d/drupal.conf
 
+
+RUN  apk update \
+  && apk add rsyslog \
+  && rm -rf /var/cache/apk/*
+
+RUN mkdir /etc/rsyslog.d/
+RUN chmod -R 777 /etc/rsyslog.d/
+RUN chmod -R 777 /var/
+
+#RUN touch /var/log/local6.log
+
+COPY config/drupal/rsyslog.conf /etc/rsyslog.conf
+
+
 EXPOSE 80
 
 # Set the entrypoint to start Apache and PHP-FPM
-ENTRYPOINT ["sh", "-c", "httpd; php-fpm82; tail -f /dev/null"]
+ENTRYPOINT ["sh", "-c", "rsyslogd; httpd; php-fpm82; tail -f /dev/null"]
 
 # Set the default command (This is generally used to define default arguments for the entrypoint)
 CMD ["-D", "FOREGROUND"]
