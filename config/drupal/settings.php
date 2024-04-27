@@ -889,6 +889,9 @@ $settings['redis.connection']['port'] = getenv('REDIS_PORT');
 $settings['redis.connection']['password'] = getenv('REDIS_PASSWORD');
 $settings['redis.connection']['timeout'] = 2.5;
 
+$settings['trusted_host_patterns'] = [
+  '^uareviews\.k3s$',
+];
 /**
  * Load local development override configuration, if available.
  *
