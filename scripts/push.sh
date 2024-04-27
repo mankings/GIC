@@ -31,3 +31,10 @@ sudo docker push registry.deti/uareviews/nginx:$version
 sudo docker push registry.deti/uareviews/nginx:latest
 sudo docker push registry.deti/uareviews/rsyslog:$version
 sudo docker push registry.deti/uareviews/rsyslog:latest
+
+# Remove the tar files
+rm drupal_$version.tar
+rm mariadb_$version.tar
+rm redis_$version.tar
+rm nginx_$version.tar
+rm rsyslog_$version.tar
