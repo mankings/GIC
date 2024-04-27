@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: registry.deti/uareviews/redis:latest
+        image: registry.deti/uareviews/redis:1.0.0
         ports:
         - containerPort: 6379
         env:

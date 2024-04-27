@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: registry.deti/uareviews/landingpage
+        image: registry.deti/uareviews/nginx:1.0.0
         ports:
         - containerPort: 80
 
