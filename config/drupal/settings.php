@@ -883,6 +883,12 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 
 $config['system.logging']['error_level']='verbose';
 
+$settings['redis.connection']['interface'] = 'PhpRedis';
+$settings['redis.connection']['host'] = getenv('REDIS_HOST');
+$settings['redis.connection']['port'] = getenv('REDIS_PORT');
+$settings['redis.connection']['password'] = getenv('REDIS_PASSWORD');
+$settings['redis.connection']['timeout'] = 2.5;
+
 /**
  * Load local development override configuration, if available.
  *

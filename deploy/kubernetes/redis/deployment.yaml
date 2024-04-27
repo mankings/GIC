@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: redis-dep
   namespace: uareviews
@@ -16,5 +16,12 @@ spec:
       containers:
       - name: redis
         image: docker.io/uareviews/redis:latest
+        imagePullPolicy: Never
         ports:
-        - containerPort: 80
+        - containerPort: 6379
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD

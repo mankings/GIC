@@ -4,8 +4,10 @@ metadata:
   name: drupal-settings
   namespace: uareviews
 data:
-  MYSQL_USER: admin
+  MYSQL_USER: uareviews
   MYSQL_DATABASE: uareviews
   MYSQL_HOST: "mariadb-sts-0.mariadb-svc.uareviews.svc.cluster.local"
   MYSQL_PORT: "3306"
 
+  REDIS_HOST: "redis-svc"
+  REDIS_PORT: "6379"
