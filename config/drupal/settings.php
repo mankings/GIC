@@ -90,14 +90,21 @@
  */
 $databases = [];
 $databases['default']['default'] = array (
+  // 'database' => 'uareviews',
   'database' => getenv('MYSQL_DATABASE'),
+  // 'username' => 'admin',
   'username' => getenv('MYSQL_USER'),
+  // 'password' => 'password',
   'password' => getenv('MYSQL_PASSWORD'),
-  'host' => 'mariadb-sts-0.mariadb-svc.uareviews.svc.cluster.local',
-  'port' => 3306,
-  'driver' => 'mysql',
   'prefix' => '',
-  'collation' => 'utf8mb4_general_ci',
+  // 'host' => 'mariadb-sts-0.mariadb-svc.uareviews.svc.cluster.local',
+  'host' => getenv('MYSQL_HOST'),
+  // 'port' => '3306',
+  'port' => getenv('MYSQL_PORT'),
+  'isolation_level' => 'READ COMMITTED',
+  'driver' => 'mysql',
+  'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
+  'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 );
 
 /**

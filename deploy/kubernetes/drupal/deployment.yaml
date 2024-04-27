@@ -20,43 +20,36 @@ spec:
         ports:
         - containerPort: 80
         env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: drupal-settings
+              key: MYSQL_DATABASE
         - name: MYSQL_USER
           valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: user
+            configMapKeyRef:
+              name: drupal-settings
+              key: MYSQL_USER
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: drupal-secret
-              key: password
-        - name: MYSQL_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: database
+              key: MYSQL_PASSWORD
         - name: MYSQL_HOST
           valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: host
+            configMapKeyRef:
+              name: drupal-settings
+              key: MYSQL_HOST
         - name: MYSQL_PORT
           valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: port
+            configMapKeyRef:
+              name: drupal-settings
+              key: MYSQL_PORT
 
         volumeMounts:
         - name: drupal-pvc
-          mountPath: /var/www/localhost/htdocs/sites
-          # - name: drupal-settings
-          #   mountPath: /var/www/localhost/htdocs/sites/default/settings.php
-          #   subPath: settings.php
-          #   readOnly: false
+          mountPath: /var/www/localhost/htdocs/drupal/sites/default/files
       volumes:
       - name: drupal-pvc
         persistentVolumeClaim:
           claimName: drupal-pvc
-      # - name: drupal-settings
-      #   configMap:
-      #     name: drupal-settings

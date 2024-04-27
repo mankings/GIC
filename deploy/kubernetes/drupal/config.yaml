@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: drupal-settings
+  namespace: uareviews
+data:
+  MYSQL_USER: admin
+  MYSQL_DATABASE: uareviews
+  MYSQL_HOST: "mariadb-sts-0.mariadb-svc.uareviews.svc.cluster.local"
+  MYSQL_PORT: "3306"
+
