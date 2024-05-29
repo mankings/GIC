@@ -20,3 +20,4 @@ kubectl apply -f deploy/kubernetes/drupal/pvc.yaml
 kubectl apply -f deploy/kubernetes/drupal/deployment.yaml
 
 kubectl apply -f deploy/kubernetes/ingress.yaml
+    
