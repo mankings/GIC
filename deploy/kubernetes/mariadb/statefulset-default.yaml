@@ -14,53 +14,53 @@ spec:
         app: mariadb
     spec:
       containers:
-        - name: mariadb
-          image: mariadb:11.3.2
-          # imagePullPolicy: Never
-          ports:
-            - containerPort: 3306
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mariadb-secret
-                  key: root-password
-            - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mariadb-secret
-                  key: database
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mariadb-secret
-                  key: user
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mariadb-secret
-                  key: password
-          volumeMounts:
-            - name: mariadb-data
-              mountPath: /var/lib/mysql
-        - name: liveness
-          image: registry.k8s.io/busybox
-          args:
-            - /bin/sh
-            - -c
-            - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
-          livenessProbe:
-            exec:
-              command:
-                - cat
-                - /tmp/healthy
-            initialDelaySeconds: 5
-            periodSeconds: 5
-        volumeClaimTemplates:
-          - metadata:
-              name: mariadb-data
-            spec:
-              accessModes: ["ReadWriteOnce"]
-              resources:
-                requests:
-                  storage: 512Mi
+      - name: mariadb
+        image: mariadb:11.3.2
+        # imagePullPolicy: Never
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: root-password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: database
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: password
+        volumeMounts:
+        - name: mariadb-data
+          mountPath: /var/lib/mysql
+      - name: liveness
+        image: registry.k8s.io/busybox
+        args:
+        - /bin/sh
+        - -c
+        - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
+  volumeClaimTemplates:
+  - metadata:
+      name: mariadb-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 512Mi

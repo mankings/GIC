@@ -29,10 +29,15 @@ RUN wget https://ftp.drupal.org/files/projects/redis-8.x-1.7.tar.gz \
 
 # rsyslog module
 
+# opentelemetry module
+RUN wget https://ftp.drupal.org/files/projects/opentelemetry-1.0.0-beta3.tar.gz \
+    && tar -zxf opentelemetry-1.0.0-beta3.tar.gz \
+    && mv opentelemetry /var/www/localhost/htdocs/drupal/modules/contrib/opentelemetry \
+    && rm opentelemetry-1.0.0-beta3.tar.gz
+
 # adjust apache config
 RUN sed -i 's/#LoadModule rewrite_module/LoadModule rewrite_module/' /etc/apache2/httpd.conf
 RUN sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf
-# RUN sed -i 's#^DocumentRoot "/var/www/localhost/htdocs/drupal"$#DocumentRoot "/var/www/localhost/htdocs/drupal"#' /etc/apache2/httpd.conf
 
 COPY config/drupal/settings.php /var/www/localhost/htdocs/drupal/sites/default/settings.php
 COPY config/drupal/drupal.conf /etc/apache2/conf.d/drupal.conf
@@ -45,10 +50,7 @@ RUN  apk update \
 RUN mkdir /etc/rsyslog.d/
 RUN chmod -R 777 /etc/rsyslog.d/
 
-#RUN touch /var/log/local6.log
-
 COPY config/drupal/rsyslog.conf /etc/rsyslog.conf
-
 
 EXPOSE 80
 
