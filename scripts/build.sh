@@ -1,6 +1,8 @@
 # Define the version
 version="1.0.0"
 
+
+
 # Build Docker images with version tags
 docker build . -t uareviews/drupal:$version -f deploy/docker/Dockerfile.drupal
 docker build . -t uareviews/mariadb:$version -f deploy/docker/Dockerfile.mariadb
