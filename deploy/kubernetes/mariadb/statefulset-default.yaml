@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mariadb-sts
+  namespace: uareviews
 spec:
   serviceName: mariadb-svc
   replicas: 1
@@ -43,19 +44,6 @@ spec:
         volumeMounts:
         - name: mariadb-data
           mountPath: /var/lib/mysql
-      - name: liveness
-        image: registry.k8s.io/busybox
-        args:
-        - /bin/sh
-        - -c
-        - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
-        livenessProbe:
-          exec:
-            command:
-            - cat
-            - /tmp/healthy
-          initialDelaySeconds: 5
-          periodSeconds: 5
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
