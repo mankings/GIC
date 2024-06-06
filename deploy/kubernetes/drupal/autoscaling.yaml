@@ -9,5 +9,5 @@ spec:
     kind: Deployment
     name: drupal-dep
   minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
