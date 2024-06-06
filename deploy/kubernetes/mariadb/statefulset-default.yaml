@@ -44,6 +44,22 @@ spec:
         volumeMounts:
         - name: mariadb-data
           mountPath: /var/lib/mysql
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1'"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1'"
+          initialDelaySeconds: 5
+          periodSeconds: 10
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
