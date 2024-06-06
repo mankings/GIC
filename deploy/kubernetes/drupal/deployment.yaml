@@ -14,46 +14,58 @@ spec:
         app: drupal
     spec:
       containers:
-      - name: drupal
-        image: registry.deti/uareviews/drupal:1.0.0
-        ports:
-        - containerPort: 80
-        env:
-        - name: MYSQL_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: drupal-settings
-              key: MYSQL_DATABASE
-        - name: MYSQL_USER
-          valueFrom:
-            configMapKeyRef:
-              name: drupal-settings
-              key: MYSQL_USER
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: MYSQL_PASSWORD
-        - name: MYSQL_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: drupal-settings
-              key: MYSQL_HOST
-        - name: MYSQL_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: drupal-settings
-              key: MYSQL_PORT
-        - name: HASH_SALT
-          valueFrom:
-            secretKeyRef:
-              name: drupal-secret
-              key: HASH_SALT
-
-        volumeMounts:
-        - name: drupal-pvc
-          mountPath: /var/www/localhost/htdocs/drupal/sites/default/files
+        - name: drupal
+          image: registry.deti/uareviews/drupal:1.0.0
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 80
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: drupal-settings
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: drupal-settings
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: drupal-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: drupal-settings
+                  key: MYSQL_HOST
+            - name: MYSQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: drupal-settings
+                  key: MYSQL_PORT
+            - name: HASH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: drupal-secret
+                  key: HASH_SALT
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 50
+            periodSeconds: 10
+          volumeMounts:
+            - name: drupal-pvc
+              mountPath: /var/www/localhost/htdocs/drupal/sites/default/files
       volumes:
-      - name: drupal-pvc
-        persistentVolumeClaim:
-          claimName: drupal-pvc
+        - name: drupal-pvc
+          persistentVolumeClaim:
+            claimName: drupal-pvc

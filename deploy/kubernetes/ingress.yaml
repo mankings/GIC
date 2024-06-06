@@ -17,6 +17,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx-svc
+            name: drupal-svc
             port:
               number: 80
