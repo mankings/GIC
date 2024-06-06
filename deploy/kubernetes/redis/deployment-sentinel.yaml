@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-sentinel-dep
+  namespace: uareviews
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-sentinel
+  template:
+    metadata:
+      labels:
+        app: redis-sentinel
+        master: "true"
+    spec:
+      containers:
+      - name: redis-sentinel
+        image: registry.deti/uareviews/redis:1.0.0
+        volumeMounts:
+        - mountPath: /redis-data
+          name: redis-directory-binding
+          readOnly: false
+
+        ports:
+        - containerPort: 6379
+
+        env:
+        - name: SENTINEL
+          value: "true"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD
+        - name: REDIS_HA_CLUSTER_SENTINEL_SERVICE_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: redis-settings
+              key: REDIS_SENTINEL_HOST
+        - name: REDIS_HA_CLUSTER_SENTINEL_SERVICE_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: redis-settings
+              key: REDIS_SENTINEL_PORT
+        - name: REDIS_HA_CLUSTER_STARTUP_REDIS_MASTER_SERVICE_SERVICE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: redis-settings
+              key: REDIS_MASTER_HOST
+        - name: REDIS_HA_CLUSTER_STARTUP_REDIS_MASTER_SERVICE_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: redis-settings
+              key: REDIS_MASTER_PORT
+
+      volumes:
+      - hostPath:
+          path: /tmp/data/1
+        name: redis-directory-binding
+

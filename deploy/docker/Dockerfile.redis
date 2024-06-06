@@ -2,12 +2,15 @@ FROM alpine:3.19
 
 LABEL maintainer="UAREVIEWS"
 
-RUN apk add --no-cache redis \
+RUN apk add --no-cache redis bash \
     && mkdir /data \
     && chown redis:redis /data
 
-COPY config/redis/redis.conf /etc/redis.conf
+COPY config/redis/redis-master.conf /etc/redis-master.conf
+COPY config/redis/redis-master.conf /etc/redis-sentinel.conf
+COPY config/redis/redis-slave.conf /etc/redis-slave.conf
 
-EXPOSE 6379
+COPY config/redis/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["redis-server", "/etc/redis.conf"]
+ENTRYPOINT ["/entrypoint.sh"]

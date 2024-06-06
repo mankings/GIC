@@ -49,6 +49,12 @@ spec:
             secretKeyRef:
               name: drupal-secret
               key: HASH_SALT
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 50
+          periodSeconds: 10
 
         volumeMounts:
         - name: drupal-pvc
