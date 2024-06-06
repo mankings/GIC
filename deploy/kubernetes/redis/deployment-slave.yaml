@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-slave-dep
+  namespace: uareviews
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-slave
+  template:
+    metadata:
+      labels:
+        app: redis-slave
+        slave: "true"
+    spec:
+      containers:
+      - name: redis-slave
+        image: registry.deti/uareviews/redis:1.0.0
+
+        ports:
+        - containerPort: 6379
+
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD

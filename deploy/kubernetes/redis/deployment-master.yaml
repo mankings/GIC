@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-master-dep
+  namespace: uareviews
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-master
+  template:
+    metadata:
+      labels:
+        app: redis-master
+        master: "true"
+    spec:
+      containers:
+      - name: redis-master
+        image: registry.deti/uareviews/redis:1.0.0
+
+        ports:
+        - containerPort: 6379
+
+        env:
+        - name: MASTER
+          value: "true"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD

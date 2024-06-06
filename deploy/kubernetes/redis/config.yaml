@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-settings
+  namespace: uareviews
+data:
+  REDIS_MASTER_HOST: "redis-master-svc"
+  REDIS_MASTER_PORT: "6379"
+
+  REDIS_SENTINEL_HOST: "redis-sentinel-svc"
+  REDIS_SENTINEL_PORT: "26379"
