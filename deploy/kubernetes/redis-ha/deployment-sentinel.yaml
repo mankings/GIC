@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-sentinel-dep
+  namespace: uareviews
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      role: sentinel
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: sentinel
+    spec:
+      containers:
+      - name: redis-sentinel
+        image: registry.deti/uareviews/redis:1.0.0
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--sentinel"]
+
+        ports:
+        - containerPort: 26379
+
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD
+
+        volumeMounts:
+        - name: redis-config
+          mountPath: /usr/local/etc/redis/redis.conf
+          subPath: sentinel.conf
+
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-sentinel-config

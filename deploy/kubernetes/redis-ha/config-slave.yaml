@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-slave-config
+  namespace: uareviews
+data:
+  redis.conf: |
+    port 6379
+    bind 0.0.0.0
+    appendonly yes
+    dir /data
+    slaveof redis-svc 6379
