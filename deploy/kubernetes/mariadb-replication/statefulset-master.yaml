@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb-master
+  namespace: uareviews
+spec:
+  serviceName: "mariadb-master"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+      role: master
+  template:
+    metadata:
+      labels:
+        app: mariadb
+        role: master
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:latest
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: mariadb-root-password
+        volumeMounts:
+        - name: config
+          mountPath: /etc/mysql/conf.d
+        - name: initdb
+          mountPath: /docker-entrypoint-initdb.d
+        - name: datadir
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: config
+        configMap:
+          name: mariadb-configmap
+          items:
+          - key: master.cnf
+            path: master.cnf
+      - name: initdb
+        configMap:
+          name: mariadb-configmap
+          items:
+          - key: master.sql
+            path: master.sql
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 256Mi
