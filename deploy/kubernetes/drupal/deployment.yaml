@@ -60,15 +60,15 @@ spec:
               name: drupal-secret
               key: HASH_SALT
 
-        livenessProbe:
-          exec:
-            command:
-            - wget
-            - --spider
-            - -q
-            - http://uareviews.k3s/
-          initialDelaySeconds: 50
-          periodSeconds: 20
+        # livenessProbe:
+        #   exec:
+        #     command:
+        #     - wget
+        #     - --spider
+        #     - -q
+        #     - http://uareviews.k3s/
+        #   initialDelaySeconds: 50
+        #   periodSeconds: 20
 
         volumeMounts:
         - name: drupal-pvc
