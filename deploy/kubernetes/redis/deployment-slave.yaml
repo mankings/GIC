@@ -7,15 +7,16 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: redis-slave
+      app: redis
+      role: slave
   template:
     metadata:
       labels:
-        app: redis-slave
-        slave: "true"
+        app: redis
+        role: slave
     spec:
       containers:
-      - name: redis-slave
+      - name: redis
         image: registry.deti/uareviews/redis:1.0.0
 
         ports:
@@ -27,3 +28,13 @@ spec:
             secretKeyRef:
               name: redis-secret
               key: REDIS_PASSWORD
+
+        volumeMounts:
+        - name: redis-config
+          mountPath: /usr/local/etc/redis/redis.conf
+          subPath: redis.conf
+
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-slave-config
