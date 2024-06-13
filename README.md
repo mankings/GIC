@@ -1,4 +1,4 @@
-# UAREVIEWS - Drupal on K8s
+# UAREVIEWS - Drupal on Kubernetes
 
 | NMEC   | Nome            | Mail                  |
 |--------|-----------------|-----------------------|
